@@ -1,0 +1,95 @@
+create table emp(
+emp_id number(2)  PRIMARY KEY,
+emp_name varchar2(20))
+
+create table department(
+dept_id number(4) PRIMARY KEY,
+dept_name varchar2(20));
+
+create table paydetails(
+emp_id number(2),
+dept_id number(4),
+Salary number(10,2)
+doj DATE,
+Constraint foreign key(emp_id) references emp(emp_id),
+Constraint foreign key(dept_id) references department(dept_id),
+Primary key(emp_id, dept_id)
+);
+
+create table payroll(
+emp_id number(2),
+pay_date DATE,
+Constraint foreign key(emp_id) references emp(emp_id));
+
+insert into emp values(1,'Abhishek');
+insert into emp values(2,'Akshat');
+insert into emp values(3,'Harshit');
+insert into emp values(4,'Ayush');
+
+insert into department values(101,'Mechanical');
+insert into department values(102,'Telecom');
+insert into department values(103,'Civil');
+insert into department values(104,'CS');
+insert into department values(105,'Management');
+
+insert into paydetails values(5,110,110000,10000,5000,'3-MAR-2000');
+insert into paydetails values(6,109,76000,5000,500,'1-DEC-1999');
+insert into paydetails values(1,110,110000,9000,1000,'31-MAR-1998');
+insert into paydetails values(2,106,12000,1100,200,'13-OCT-2000');
+insert into paydetails values(9,106,12000,5000,100,'11-MAR-1965');
+
+insert into payroll values(1,'1-JAN-2022');
+insert into payroll values(2,'5-JAN-2022');
+insert into payroll values(3,'9-JAN-2022');
+insert into payroll values(4,'7-JAN-2022');
+insert into payroll values(5,'1-JAN-2022');
+
+
+4.
+Select emp_name, salary*12 as "annual salary"
+From emp e natural join paydetails p
+Where e.emp_id = 20
+
+
+5.
+Select emp_name
+From emp e natural join paydetails p
+Where salary > 90000
+
+
+6.
+Select dept_id , count(emp_id)
+From paydetails
+Group by (dept_id)
+
+
+7.
+Select emp_name
+From emp e natural join paydetails p
+Where doj>to_date('02-Jan-2015')
+
+
+8.
+Select emp_name, e.emp_id, dept_id, salary, doj
+From emp e natural join paydetails p
+Where salary between 20000 and 60000
+
+
+9.
+Create view view2
+As (select emp_name,dept_id,salary from emp Natural Join paydetails)
+
+
+10.
+Select to_char(sysdate, 'DD-MM-YYYY') from dual
+
+
+
+
+
+
+
+
+
+
+
