@@ -1,0 +1,75 @@
+CREATE TABLE CUSTOMER(CUST_NO INT primary 	KEY ,CUST_NAME varchar2(225));
+
+CREATE TABLE MEMBERSHIP(
+MEM_NO INT PRIMARY KEY,
+CUST_NO INT ,
+FOREIGN KEY(CUST_NO) REFERENCES CUSTOMER(CUST_NO));
+
+CREATE TABLE CD(CD_CODE INT PRIMARY KEY,CD_TITLE VARCHAR2(255),LANGUAGE VARCHAR2(255));
+CREATE TABLE ISS_REC(ISS_NO INT PRIMARY KEY,ISS_DATE DATE,MEM_NO INT,CD_CODE INT,FOREIGN KEY(MEM_NO) REFERENCES MEMBERSHIP(MEM_NO),FOREIGN KEY (CD_CODE) REFERENCES CD(CD_CODE));
+
+
+
+
+insert into customer values(1,'Kartik');
+insert into customer values(2,'Vansh');
+insert into customer values(3,'Mehta');
+insert into customer values(4,'Tyagi');
+insert into customer values(5,'Aditya');
+
+insert into Membership values(110,1);
+insert into Membership values(250,2);
+insert into Membership values(200,3);
+insert into Membership values(120,4);
+insert into Membership values(100,5);
+
+insert into CD values(10,'dhoom','hindi');
+insert into CD values(20,'dhoom2','hindi');
+insert into CD values(30,'dhoom3','hindi');
+insert into CD values(40,'lata songs','english');
+insert into CD values(50,'lata songs','english');
+
+insert into iss_rec values(11,'02-JAN-2022',110,10);
+insert into iss_rec values(12,'03-JAN-2022',200,20);
+insert into iss_rec values(13,'04-JAN-2022',110,30);
+insert into iss_rec values(14,'05-JAN-2022',250,40);
+insert into iss_rec values(15,'15-DEC-2022',120,50);
+
+
+
+SELECT * FROM CUSTOMER
+SELECT * FROM MEMBERSHIP;
+SELECT * FROM CD;
+SELECT * FROM ISS_REC;
+
+Q4List all the customer names with their membership numbers-:
+select cust_name,mem_no from customer natural join membership
+
+5. List the details of the customer who has borrowed the CD whose title STARTS with k.
+ Select  c.cust_no,c.cust_name
+From customer c, membership m,iss_rec i, cd d
+Where  i.cd_code=d.cd_code  and i.mem_no=m.mem_no and m.cust_no=c.cust_no
+And d.cd_title like 'd%'
+
+
+4. List all the issues for the current date with the customer names and CD names.
+select i.iss_no , c.cust_name,cs.cd_title from customer c, membership m , CD cs , iss_rec i where c.cust_no=m.cust_no and m.mem_no=i.mem_no and cs.cd_code=i.cd_code and i.iss_date=to_char(sysdate);
+
+Q8. Give a count of how many CDs have been borrowed by each customer.
+select s.cust_no, count(i.cd_code) from customer s,membership m, CD b,  iss_rec i where s.cust_no=m.cust_no and b.cd_code=i.cd_code group by s.cust_no ;
+
+7. Give a list of cd which has been taken by the student with mem_no as 110;-
+select cd_title from CD where cd_code in (select cd_code from iss_rec where mem_no in(select mem_no from membership where cust_no in(select cust_no from customer where cust_no=110)));
+
+8. List the CDs issues for today.
+select cd_title from CD where cd_code in (select cd_code from iss_rec
+ where iss_date=to_char(sysdate)); 
+
+9. Create a view which lists outs the iss_no, iss_date, cust_name, cd_title.
+create view cus_view as select i.iss_no,i.iss_date,c.cust_name,cd_title from customer c,membership m,CD c,iss_rec i where c.cust_no=m.cust_no and c.cd_code=i.cd_code and m.mem_no=i.mem_no;
+
+
+
+
+
+
